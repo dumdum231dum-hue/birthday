@@ -21,7 +21,6 @@ const LETTER_LINES = [
   "",
   "— Your best friend",
 ]
-// ──────────────────────────────────────────────────────────────────────────────
 
 export default function Message() {
   const sectionRef = useRef(null)
@@ -38,7 +37,6 @@ export default function Message() {
         setDisplayedLines(LETTER_LINES.map(() => ''))
       }
     }, { threshold: 0.3 })
-
     if (sectionRef.current) observer.observe(sectionRef.current)
     return () => observer.disconnect()
   }, [started])
@@ -46,11 +44,9 @@ export default function Message() {
   useEffect(() => {
     if (!started || done) return
     if (currentLine >= LETTER_LINES.length) { setDone(true); return }
-
     const line = LETTER_LINES[currentLine]
-
     if (currentChar <= line.length) {
-      const delay = line === '' ? 180 : 28
+      const delay = line === '' ? 150 : 25
       const timer = setTimeout(() => {
         setDisplayedLines(prev => {
           const next = [...prev]
@@ -61,86 +57,71 @@ export default function Message() {
       }, delay)
       return () => clearTimeout(timer)
     } else {
-      const pause = LETTER_LINES[currentLine] === '' ? 80 : 120
       const timer = setTimeout(() => {
         setCurrentLine(l => l + 1)
         setCurrentChar(0)
-      }, pause)
+      }, line === '' ? 80 : 100)
       return () => clearTimeout(timer)
     }
   }, [started, currentLine, currentChar, done])
 
   return (
-    <section
-      ref={sectionRef}
-      className="py-32 px-6 md:px-16 bg-dark relative overflow-hidden"
-    >
-      {/* Radial glow */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div style={{
-          width: '800px',
-          height: '600px',
-          background: 'radial-gradient(ellipse, rgba(201,168,76,0.04) 0%, transparent 70%)',
-        }} />
-      </div>
+    <section ref={sectionRef} className="w-full min-h-screen flex flex-col items-center justify-center bg-white px-6 py-32">
+      <div className="w-full max-w-2xl mx-auto">
+        <p className="caption mb-8" style={{ letterSpacing: '0.2em' }}>A letter for you</p>
 
-      <div className="max-w-3xl mx-auto relative z-10">
+        <div className="divider w-full mb-16" />
 
-        {/* Section header */}
-        <p className="reveal font-body text-xs uppercase tracking-[0.4em] text-gold/50 mb-4">Chapter 03</p>
-        <h2 className="reveal reveal-delay-1 font-display text-6xl md:text-8xl text-white/90 leading-none mb-16">
-          A LETTER
-        </h2>
-        <div className="reveal reveal-delay-2 line-gold w-32 mb-16" />
-
-        {/* Letter card */}
         <div
-          className="relative border border-white/[0.06] bg-dark-2/50 p-10 md:p-16"
-          style={{ backdropFilter: 'blur(10px)' }}
+          style={{
+            fontFamily: "'DM Serif Display', Georgia, serif",
+            fontStyle: 'italic',
+            fontSize: 'clamp(16px, 2vw, 20px)',
+            lineHeight: 1.9,
+            color: '#1d1d1f',
+          }}
         >
-          {/* Corner ornaments */}
-          <div className="absolute top-4 left-4 w-6 h-6 border-t border-l border-gold/30" />
-          <div className="absolute top-4 right-4 w-6 h-6 border-t border-r border-gold/30" />
-          <div className="absolute bottom-4 left-4 w-6 h-6 border-b border-l border-gold/30" />
-          <div className="absolute bottom-4 right-4 w-6 h-6 border-b border-r border-gold/30" />
-
-          {/* Letter text */}
-          <div className="font-serif italic text-white/75 leading-relaxed" style={{ fontSize: '1.1rem' }}>
-            {displayedLines.map((line, i) => (
-              <p
-                key={i}
-                className={`min-h-[1.8em] ${i === 0 ? 'text-gold font-body not-italic font-medium text-sm tracking-widest uppercase mb-6' : ''}`}
-                style={{ letterSpacing: i === 0 ? '0.2em' : undefined }}
-              >
-                {line}
-                {/* Show cursor on current typing line */}
-                {i === currentLine && !done && (
-                  <span className="typewriter-cursor" />
-                )}
-              </p>
-            ))}
-          </div>
+          {displayedLines.map((line, i) => (
+            <p
+              key={i}
+              className="min-h-[1.9em]"
+              style={{
+                fontFamily: i === 0 ? "'DM Sans', sans-serif" : undefined,
+                fontStyle: i === 0 ? 'normal' : undefined,
+                fontWeight: i === 0 ? 500 : undefined,
+                fontSize: i === 0 ? '12px' : undefined,
+                letterSpacing: i === 0 ? '0.2em' : undefined,
+                textTransform: i === 0 ? 'uppercase' : undefined,
+                marginBottom: i === 0 ? '2rem' : undefined,
+                color: i === 0 ? '#6e6e73' : undefined,
+              }}
+            >
+              {line}
+              {i === currentLine && !done && <span className="typewriter-cursor" />}
+            </p>
+          ))}
         </div>
 
-        {/* Birthday sign off */}
         {done && (
-          <div className="mt-16 text-center animate-fade-up">
-            <div className="line-gold w-32 mx-auto mb-8" />
-            <p className="font-display text-4xl md:text-6xl text-white/20 tracking-widest">HAPPY BIRTHDAY</p>
-            <p className="font-display text-6xl md:text-9xl gold-shimmer leading-none mt-2">SHRADDHA</p>
-            <p className="mt-6 font-body text-gold/50 text-xs tracking-widest uppercase" style={{ letterSpacing: '0.4em' }}>
-              with love <span className="heartbeat inline-block text-red-400">♥</span>
+          <div className="mt-20 animate-fade-up">
+            <div className="divider w-full mb-16" />
+            <h2
+              className="text-center text-[#1d1d1f]"
+              style={{
+                fontSize: 'clamp(48px, 10vw, 120px)',
+                fontFamily: "'DM Serif Display', Georgia, serif",
+                fontWeight: 400,
+                lineHeight: 1.0,
+                letterSpacing: '-0.03em',
+              }}
+            >
+              Happy Birthday,<br />Shraddha
+            </h2>
+            <p className="text-center mt-8 caption" style={{ letterSpacing: '0.2em' }}>
+              with love <span className="heartbeat inline-block" style={{ color: '#ff3b30' }}>♥</span>
             </p>
           </div>
         )}
-      </div>
-
-      {/* Decorative number */}
-      <div
-        className="absolute top-16 right-10 font-display text-white/[0.03] select-none pointer-events-none"
-        style={{ fontSize: '18vw', lineHeight: 1 }}
-      >
-        03
       </div>
     </section>
   )
