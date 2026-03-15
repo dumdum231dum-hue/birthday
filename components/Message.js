@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 const LETTER_LINES = [
   "Dear Shraddha,",
   "",
+  "HATTT TMKC LODE IT LITERALLY TOOK 1 MONTH TO BUILD TS"
   "Where do I even begin? You've been one of those rare people",
   "who makes every moment feel a little more alive. Whether it's",
   "the ridiculous things we laugh about, or just existing in the",
