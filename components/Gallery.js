@@ -6,12 +6,12 @@ import { useEffect, useRef } from 'react'
 // 2. Update this array with the correct filenames and captions
 // ─────────────────────────────────────────────────────────────────────────────
 const photos = [
-  { src: '/images/photo1.png', caption: 'Remember this day 🥂', span: 'col-span-2 row-span-2' },
-  { src: '/images/photo2.png', caption: 'Always laughing', span: 'col-span-1 row-span-1' },
-  { src: '/images/photo3.png', caption: 'The best memories', span: 'col-span-1 row-span-1' },
-  { src: '/images/photo4.png', caption: 'Forever grateful', span: 'col-span-1 row-span-2' },
-  { src: '/images/photo5.png', caption: 'You & me', span: 'col-span-1 row-span-1' },
-  { src: '/images/photo6.png', caption: 'Unforgettable', span: 'col-span-2 row-span-1' },
+  { src: '/images/photo1.jpeg', caption: 'Remember this day 🥂', span: 'col-span-2 row-span-2' },
+  { src: '/images/photo2.jpeg', caption: 'Always laughing', span: 'col-span-1 row-span-1' },
+  { src: '/images/photo3.jpeg', caption: 'The best memories', span: 'col-span-1 row-span-1' },
+  { src: '/images/photo4.jpeg', caption: 'Forever grateful', span: 'col-span-1 row-span-2' },
+  { src: '/images/photo5.jpeg', caption: 'You & me', span: 'col-span-1 row-span-1' },
+  { src: '/images/photo6.jpeg', caption: 'Unforgettable', span: 'col-span-2 row-span-1' },
 ]
 
 export default function Gallery() {
