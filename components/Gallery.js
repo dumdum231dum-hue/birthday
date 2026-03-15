@@ -1,82 +1,86 @@
 import Image from 'next/image'
 import { useEffect, useRef } from 'react'
 
-// ─── ADD YOUR PHOTOS HERE ────────────────────────────────────────────────────
-// 1. Drop your image files into the /public/images/ folder
-// 2. Update this array with the correct filenames and captions
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── EDIT CAPTIONS HERE ──────────────────────────────────────────────────────
 const photos = [
-  { src: '/images/photo1.jpeg', caption: 'Remember this day 🥂', span: 'col-span-2 row-span-2' },
-  { src: '/images/photo2.jpeg', caption: 'Always laughing', span: 'col-span-1 row-span-1' },
-  { src: '/images/photo3.jpeg', caption: 'The best memories', span: 'col-span-1 row-span-1' },
-  { src: '/images/photo4.jpeg', caption: 'Forever grateful', span: 'col-span-1 row-span-2' },
-  { src: '/images/photo5.jpeg', caption: 'You & me', span: 'col-span-1 row-span-1' },
-  { src: '/images/photo6.jpeg', caption: 'Unforgettable', span: 'col-span-2 row-span-1' },
+  { src: '/images/photo1.jpeg', caption: 'Remember this day', number: '01' },
+  { src: '/images/photo2.jpeg', caption: 'Always laughing', number: '02' },
+  { src: '/images/photo3.jpeg', caption: 'The best memories', number: '03' },
+  { src: '/images/photo4.jpeg', caption: 'Forever grateful', number: '04' },
+  { src: '/images/photo5.jpeg', caption: 'You & me', number: '05' },
+  { src: '/images/photo6.jpeg', caption: 'Unforgettable', number: '06' },
 ]
 
 export default function Gallery() {
-  const sectionRef = useRef(null)
+  const refs = useRef([])
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible')
+          entry.target.querySelectorAll('.reveal, .reveal-scale').forEach(el => {
+            el.classList.add('visible')
+          })
         }
       })
-    }, { threshold: 0.1 })
+    }, { threshold: 0.3 })
 
-    sectionRef.current?.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+    refs.current.forEach(ref => { if (ref) observer.observe(ref) })
     return () => observer.disconnect()
   }, [])
 
   return (
-    <section ref={sectionRef} className="py-32 px-6 md:px-16 bg-dark-2 relative">
-
-      {/* Section header */}
-      <div className="max-w-6xl mx-auto mb-16">
-        <p className="reveal font-body text-xs uppercase tracking-[0.4em] text-gold/50 mb-4">Chapter 02</p>
-        <h2 className="reveal reveal-delay-1 font-display text-6xl md:text-8xl text-white/90 leading-none">
-          MEMORIES
-        </h2>
-        <div className="reveal reveal-delay-2 line-gold w-32 mt-6" />
-      </div>
-
-      {/* Bento grid */}
-      <div
-        className="reveal reveal-delay-2 max-w-6xl mx-auto grid gap-3"
-        style={{
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gridAutoRows: '220px',
-        }}
-      >
-        {photos.map((photo, i) => (
-          <div
+    <>
+      {photos.map((photo, i) => {
+        const isEven = i % 2 === 0
+        return (
+          <section
             key={i}
-            className={`gallery-item rounded-sm bg-dark-3 ${photo.span}`}
+            ref={el => refs.current[i] = el}
+            className="w-full min-h-screen flex flex-col md:flex-row items-stretch overflow-hidden"
+            style={{ background: i % 3 === 0 ? '#ffffff' : i % 3 === 1 ? '#f5f5f7' : '#ffffff' }}
           >
-            <Image
-              src={photo.src}
-              alt={photo.caption}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-            <div className="overlay" />
-            <p className="absolute bottom-4 left-4 font-body text-sm text-white/80 font-light opacity-0 group-hover:opacity-100 transition-opacity z-10 translate-y-2 gallery-caption">
-              {photo.caption}
-            </p>
-          </div>
-        ))}
-      </div>
+            {/* Image side */}
+            <div
+              className={`reveal-scale w-full md:w-1/2 relative overflow-hidden`}
+              style={{ minHeight: '60vh' }}
+            >
+              <Image
+                src={photo.src}
+                alt={photo.caption}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            </div>
 
-      {/* Decorative number */}
-      <div
-        className="absolute top-16 right-10 font-display text-white/[0.03] select-none pointer-events-none"
-        style={{ fontSize: '18vw', lineHeight: 1 }}
-      >
-        02
-      </div>
-    </section>
+            {/* Text side */}
+            <div
+              className={`w-full md:w-1/2 flex flex-col justify-center px-8 md:px-20 py-12 md:py-20 ${isEven ? 'md:order-first' : ''}`}
+            >
+              <p className="reveal caption mb-4 md:mb-6" style={{ letterSpacing: '0.2em' }}>
+                Memory {photo.number}
+              </p>
+              <h2
+                className="reveal reveal-delay-1 text-[#1d1d1f]"
+                style={{
+                  fontSize: 'clamp(32px, 8vw, 72px)',
+                  fontFamily: "'DM Serif Display', Georgia, serif",
+                  fontWeight: 400,
+                  lineHeight: 1.1,
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                {photo.caption}
+              </h2>
+              <div className="reveal reveal-delay-2 divider w-12 my-6 md:my-8" />
+              <p className="reveal reveal-delay-3 text-[#6e6e73] font-light" style={{ fontSize: '15px', lineHeight: 1.7 }}>
+                Every moment with you is one worth remembering forever.
+              </p>
+            </div>
+          </section>
+        )
+      })}
+    </>
   )
 }
